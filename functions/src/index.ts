@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
-import { onDocumentCreated } from "firebase-functions/firestore";
+import { onDocumentCreated } from "firebase-functions/v2/firestore";
 
 initializeApp();
 const db = getFirestore();
