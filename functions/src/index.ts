@@ -47,10 +47,7 @@ async function getUserConfig(
 }
 
 export const onGenerationRequestCreated = onDocumentCreated(
-  {
-    document: "generation_requests/{docId}",
-    timeoutSeconds: 540,
-  },
+  "generation_requests/{docId}",
   async (event) => {
     const docId = event.params["docId"] as string;
     const docRef = db.collection("generation_requests").doc(docId);
