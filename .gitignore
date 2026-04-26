@@ -4,3 +4,8 @@
 **/dist/
 firebase-debug.log
 functions/firestore-debug.log
+**/venv/
+
+/inference-server/outputs/
+/inference-server/lora_cache/
+/inference-server/__pycache__/
