@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "serve": "npm run build && firebase emulators:start --only firestore,auth,functions",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
