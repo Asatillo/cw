@@ -3,6 +3,6 @@
   "private": true,
   "scripts": {
     "functions:build": "cd functions && npm run build",
-    "emulators:start": "cd functions && npm run build && firebase emulators:start --only firestore,auth,functions"
+    "emulators:start": "cd functions && npm run build && firebase emulators:start --only firestore,auth,functions --project demo-local"
   }
 }
