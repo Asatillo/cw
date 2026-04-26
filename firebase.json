@@ -1,4 +1,8 @@
 {
+  "functions": {
+    "source": "functions",
+    "runtime": "nodejs20"
+  },
   "emulators": {
     "auth": {
       "port": 9099
@@ -6,7 +10,7 @@
     "functions": {
       "port": 5001,
       "source": "functions",
-  "runtime": "nodejs20"
+      "runtime": "nodejs20"
     },
     "firestore": {
       "port": 8080
@@ -15,5 +19,8 @@
       "enabled": true
     },
     "singleProjectMode": true
+  },
+  "firestore": {
+    "rules": "firestore.rules"
   }
 }
