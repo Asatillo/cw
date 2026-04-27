@@ -53,7 +53,7 @@ current_lora_weight: float = 0.8
 
 
 def get_pipeline(lora_url: str | None = None, lora_weight: float = 0.8) -> DiffusionPipeline:
-    global pipeline, current_lora_url
+    global pipeline, current_lora_url, current_lora_weight
 
     if pipeline is None:
         logger.info("Loading base model SimianLuo/LCM_Dreamshaper_v7...")
