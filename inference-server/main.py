@@ -72,10 +72,11 @@ def get_pipeline(lora_url: str | None = None, lora_weight: float = 0.8) -> Diffu
         try:
             pipeline.load_lora_weights(str(lora_path), low_cpu_mem_usage=False)
             current_lora_url = lora_url
+            current_lora_weight = lora_weight
         except Exception as e:
             logger.warning(f"Failed to load LoRA, proceeding without it: {e}")
             current_lora_url = None
-            current_lora_weight = lora_weight
+            current_lora_weight = 0.8
     elif not lora_url and current_lora_url is not None:
         pipeline.unload_lora_weights()
         current_lora_url = None
