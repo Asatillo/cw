@@ -11,3 +11,5 @@ safetensors
 Pillow
 requests
 torchvision
+pytest
+httpx
