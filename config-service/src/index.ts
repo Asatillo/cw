@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 
-const app = express();
+export const app = express();
 const PORT = process.env.PORT ?? 3000;
 
 const LORA_CONFIGS = [
@@ -33,7 +33,7 @@ interface CacheEntry {
   expiresAt: number;
 }
 
-const cache = new Map<string, CacheEntry>();
+export const cache = new Map<string, CacheEntry>();
 
 app.get("/v1/config/:user_id", (req: Request, res: Response) => {
   const user_id = req.params["user_id"] as string;
@@ -63,6 +63,8 @@ app.get("/v1/config/:user_id", (req: Request, res: Response) => {
   res.json(entry);
 });
 
-app.listen(PORT, () => {
-  console.log(`Config service running on port ${PORT}`);
-});
+if (process.env['NODE_ENV'] !== 'test') {
+  app.listen(PORT, () => {
+    console.log(`Config service running on port ${PORT}`);
+  });
+}
