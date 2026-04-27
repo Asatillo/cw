@@ -9,3 +9,5 @@ functions/firestore-debug.log
 /inference-server/outputs/
 /inference-server/lora_cache/
 /inference-server/__pycache__/
+/inference-server/.pytest_cache/
+/inference-server/tests/__pycache__/
