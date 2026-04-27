@@ -18,9 +18,9 @@ interface LoraConfig {
   expiresAt: number;
 }
 
-const configCache = new Map<string, LoraConfig>();
+export const configCache = new Map<string, LoraConfig>();
 
-async function getUserConfig(
+export async function getUserConfig(
   userId: string
 ): Promise<Pick<LoraConfig, "lora_url" | "lora_weight"> | null> {
   const now = Date.now();
