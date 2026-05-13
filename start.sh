@@ -2,16 +2,23 @@
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# ── Tests ──────────────────────────────────────────────────────────────────
-echo "==> Running tests..."
+SKIP_TESTS=false
+for arg in "$@"; do [[ "$arg" == "--skip-tests" ]] && SKIP_TESTS=true; done
 
-(cd "$ROOT/functions" && npm test) || { echo "Functions tests failed"; exit 1; }
-(cd "$ROOT/config-service" && npm test) || { echo "Config service tests failed"; exit 1; }
-(cd "$ROOT/inference-server" && source venv/bin/activate && pytest tests/ && deactivate) \
-    || { echo "Inference server tests failed"; exit 1; }
+# ── Tests ──────────────────────────────────────────────────────────────────
+if $SKIP_TESTS; then
+    echo "==> Skipping tests."
+else
+    echo "==> Running tests..."
+
+    (cd "$ROOT/functions" && npm test) || { echo "Functions tests failed"; exit 1; }
+    (cd "$ROOT/config-service" && npm test) || { echo "Config service tests failed"; exit 1; }
+    (cd "$ROOT/inference-server" && source venv/bin/activate && pytest tests/ && deactivate) \
+        || { echo "Inference server tests failed"; exit 1; }
+fi
 
 # ── Start services ─────────────────────────────────────────────────────────
-echo "==> All tests passed. Starting services..."
+echo "==> Starting services..."
 
 (cd "$ROOT/config-service" && npm start) &
 (cd "$ROOT" && npm run emulators:start) &

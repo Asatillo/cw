@@ -2,28 +2,34 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 $Root = $PSScriptRoot
 
+$SkipTests = $args -contains "--skip-tests"
+
 # ── Tests ────────────────────────────────────────────────────────────────────
-Write-Host "`n==> Running tests..."
+if ($SkipTests) {
+    Write-Host "`n==> Skipping tests."
+} else {
+    Write-Host "`n==> Running tests..."
 
-Push-Location "$Root\functions"
-npm test
-if ($LASTEXITCODE -ne 0) { Write-Error "Functions tests failed"; exit 1 }
-Pop-Location
+    Push-Location "$Root\functions"
+    npm test
+    if ($LASTEXITCODE -ne 0) { Write-Error "Functions tests failed"; exit 1 }
+    Pop-Location
 
-Push-Location "$Root\config-service"
-npm test
-if ($LASTEXITCODE -ne 0) { Write-Error "Config service tests failed"; exit 1 }
-Pop-Location
+    Push-Location "$Root\config-service"
+    npm test
+    if ($LASTEXITCODE -ne 0) { Write-Error "Config service tests failed"; exit 1 }
+    Pop-Location
 
-Push-Location "$Root\inference-server"
-.\venv\Scripts\Activate.ps1
-pytest tests/
-if ($LASTEXITCODE -ne 0) { Write-Error "Inference server tests failed"; exit 1 }
-deactivate
-Pop-Location
+    Push-Location "$Root\inference-server"
+    .\venv\Scripts\Activate.ps1
+    pytest tests/
+    if ($LASTEXITCODE -ne 0) { Write-Error "Inference server tests failed"; exit 1 }
+    deactivate
+    Pop-Location
+}
 
 # ── Start services ────────────────────────────────────────────────────────────
-Write-Host "`n==> All tests passed. Starting services..."
+Write-Host "`n==> Starting services..."
 
 Start-Process powershell -ArgumentList "-NoExit", "-Command",
     "Set-Location '$Root\config-service'; npm start"
