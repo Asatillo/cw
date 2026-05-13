@@ -1,3 +1,4 @@
+import asyncio
 import os
 import base64
 import hashlib
@@ -67,19 +68,55 @@ def get_pipeline(lora_url: str | None = None, lora_weight: float = 0.8) -> Diffu
     if lora_url and lora_url != current_lora_url:
         lora_path = download_lora(lora_url)
         logger.info(f"Loading LoRA from {lora_path}")
-        if current_lora_url is not None:
-            pipeline.unload_lora_weights()
+        
+        # cleanup previous adapter
         try:
-            pipeline.load_lora_weights(str(lora_path), low_cpu_mem_usage=False)
+            pipeline.unload_lora_weights()
+        except Exception:
+            pass
+        
+        try:
+            pipeline.delete_adapters("active_lora")
+        except Exception:
+            pass
+        
+        
+        # if current_lora_url is not None:
+        #     pipeline.unload_lora_weights()
+        try:
+            adapter_name = "active_lora"
+
+            pipeline.load_lora_weights(
+                str(lora_path),
+                adapter_name=adapter_name
+            )
+
+            pipeline.set_adapters(
+                [adapter_name],
+                adapter_weights=[lora_weight]
+            )
+            
             current_lora_url = lora_url
             current_lora_weight = lora_weight
+            
+            logger.info("LoRA loaded successfully")
         except Exception as e:
             logger.warning(f"Failed to load LoRA, proceeding without it: {e}")
             current_lora_url = None
             current_lora_weight = 0.8
     elif not lora_url and current_lora_url is not None:
-        pipeline.unload_lora_weights()
+        try:
+            pipeline.unload_lora_weights()
+        except Exception:
+            pass
+
+        try:
+            pipeline.delete_adapters("active_lora")
+        except Exception:
+            pass
+
         current_lora_url = None
+        current_lora_weight = 0.8
 
     return pipeline
 
